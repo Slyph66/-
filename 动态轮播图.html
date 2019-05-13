@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>轮播图</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        a{
+            text-decoration: none;
+        }
+        li{
+            list-style: none;
+        }
+        img{
+            border: 0;
+            display: none;
+        }
+        #imgs .selected{
+            display: block;
+        }
+        #container{
+            width: 680px;
+            height: 344px;
+            position: relative;
+            margin: 0 auto;
+        }
+        #nav{
+            position: absolute;
+            top: 300px;
+            right: 20px;
+        }
+        #nav li , #arrows #go , #arrows #back{
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            background-color: black;
+            color: white;
+            float: left;
+            text-align: center;
+            line-height: 20px;
+            cursor: pointer;
+        }
+        #nav .selected{
+            background-color: yellow;
+            color: black;
+            user-select: none;
+        }
+        #arrows{
+            position: absolute;
+            top: 300px;
+            left: 20px;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <div id="imgs">
+        <img src="img/1.jpg" alt="" class="selected">
+        <img src="img/2.jpg" alt="" >
+        <img src="img/3.jpg" alt="" >
+        <img src="img/4.jpg" alt="" >
+    </div>
+    <ul id="nav">
+        <li class="selected">1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+    </ul>
+    <div id="arrows">
+        <span id="go">&lt;</span>
+        <span id="back">&gt;</span>
+    </div>
+</div>
+<script>
+    var oImg = document.getElementById("imgs");
+    var aImg = oImg.getElementsByTagName("img");
+    var oUl = document.getElementById("nav");
+    var aLi = oUl.getElementsByTagName("li");
+    var oGo = document.getElementById("go");
+    var oBack = document.getElementById("back");
+    var nowIndex =0 ;
+    var oContainer = document.getElementById("container");
+    var timer ;
+
+    function changeImg() {
+        for (i = 0 ;i < aLi.length ; i++){
+            aLi[i].className = "";
+            aImg[i].className = "";
+        }
+        aLi[nowIndex].className = "selected";
+        aImg[nowIndex].className = "selected";
+    }  //切换图片
+
+    for (i = 0 ;i < aLi.length ; i++){
+        aLi[i].index = i ;
+        aLi[i].onmouseover = function () {
+            nowIndex = this.index;
+            changeImg();
+        };
+    } //类似于选项卡
+
+    oBack.onclick = oGo.onclick = function () {
+        if (this === oGo) {
+            nowIndex -- ;
+            if (nowIndex === -1){
+                nowIndex = aLi.length - 1 ;
+            }
+        }
+        else{
+            nowIndex ++ ;
+            if (nowIndex === aLi.length){
+                nowIndex = 0;
+            }
+        }
+        changeImg()
+    }; //点击左侧向前切换图片；点击右侧向后切换图片
+
+    function play(){
+        timer = setInterval(function () {
+            oBack.onclick();
+            changeImg();
+        },900);
+    }  //定时器：0.9秒切换图片
+    play();//定时器开始执行
+    oContainer.onmouseover = function () {
+        clearInterval(timer);
+    };//鼠标移入停止定时器
+    oContainer.onmouseout = function () {
+        play();
+    };//鼠标移除继续定时器
+</script>
+</body>
+</html>
